@@ -6,7 +6,7 @@ import (
 	"cumulus.org/becumulus/backend/model"
 )
 
-func CreateUser(u dto.UserDTO) {
+func CreateUser(u *dto.UserDTO) {
 	db := db.GetDB()
 	newUser := model.User{
 		Username: u.Username,

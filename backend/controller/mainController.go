@@ -8,11 +8,20 @@ import (
 
 	"cumulus.org/becumulus/backend/dto"
 	"cumulus.org/becumulus/backend/service"
+	"github.com/gorilla/mux"
 )
 
-func RegisterHandlers() {
-	// http.HandleFunc("/getUsers", handler)
-	http.HandleFunc("/createUser", createUserHandler)
+func InizializeMux() *mux.Router {
+	r := mux.NewRouter()
+	r.HandleFunc("/createUser", createUserHandler)
+	r.HandleFunc("/users/{user}", getUsersHandler)
+	http.Handle("/", r)
+	return r
+}
+
+func getUsersHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	fmt.Println(vars["user"])
 }
 
 func createUserHandler(w http.ResponseWriter, r *http.Request) {
@@ -21,7 +30,7 @@ func createUserHandler(w http.ResponseWriter, r *http.Request) {
 	var newUser dto.UserDTO
 	json.Unmarshal(byt, &newUser) // unmarshal the content and then
 	//save to database
-	service.CreateUser(newUser)
+	service.CreateUser(&newUser)
 }
 
 // func handler(w http.ResponseWriter, r *http.Request) {
